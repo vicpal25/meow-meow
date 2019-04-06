@@ -1,0 +1,30 @@
+body {
+  background-color: #e22; }
+  body .spacer {
+    height: 24px; }
+  body .App .Footer, body .App .Header {
+    height: 140px; }
+  body .App .filters {
+    border: 1px solid #e22;
+    padding: 20px 0; }
+  body .App .RowHightlight {
+    height: 100%;
+    border: 1px solid #e22;
+    min-height: 100px;
+    position: relative; }
+    body .App .RowHightlight .RowMenu {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      border: 1px solid #0980ff;
+      top: 0; }
+      body .App .RowHightlight .RowMenu [data-react-beautiful-dnd-draggable] {
+        height: 100%; }
+  body .App header a {
+    color: #fff; }
+  body .App ul {
+    margin-top: 8px; }
+  body .App a {
+    text-decoration: none; }
+  body .App .active {
+    border: 1px solid #e22; }

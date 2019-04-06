@@ -1,0 +1,63 @@
+body {
+    background-color: #e22;
+
+    .spacer {
+        height:24px;
+    }
+
+    .App {
+
+        .Footer, .Header{
+            height:140px;
+        }
+
+        .filters {
+            border:1px solid #e22;
+            padding:20px 0;
+        }
+
+        .RowHightlight {
+
+            height:100%;
+            border:1px solid #e22;
+            min-height:100px;
+            position: relative;
+
+            .RowMenu {
+
+                position: absolute;
+                height:100%;
+                width:100%;
+                border: 1px solid #0980ff;
+                top:0;
+
+                [data-react-beautiful-dnd-draggable] {
+
+                   height:100%;
+
+                }
+                  
+            }
+        }
+
+        header {
+            a {
+                color:#fff;
+            }
+        }
+
+        ul {
+            margin-top: 8px;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .active {
+            border:1px solid #e22;
+        }
+                    
+    }
+
+}

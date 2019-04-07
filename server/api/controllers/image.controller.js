@@ -6,6 +6,7 @@ const async     = require('async');
 const User      = require('../../model/user');
 const Favorites = require('../../model/favorites');
 
+
 // For async callback
 const asyncCallback = function(){
 
@@ -74,22 +75,26 @@ exports.bundle = (req, res) => {
 
 exports.favorites = (req, res) => {
 
+    const user = req.params.user;
     const cb = new asyncCallback();
     let collection = {};
-
     async.series([
         // Find MakretID by market code
         (callback) => {
-            User.findOne({email : 'vicpal25@yahoo.com' }, (err, user) => {          
+            User.findOne({email : user }, (err, user) => {      
                 
-                // if(err) { return done(err, false);  }
+                if(err) {                                
+                    cb(callback, `Error finding user: err`, null);
+                }
                 
-                // if(!user) {
-                //     done(null, false);
-                // } 
+                if(!user) {
+                    cb(callback, `User not found`, null);
+                } 
 
                 collection.user = user;
                 cb(callback, null,  collection.user);
+
+                
             })
         },
         (callback) => {
@@ -102,9 +107,7 @@ exports.favorites = (req, res) => {
         }],
             (err,results) => {
 
-
-
-                var responseJson = err ? JSON.stringify(err) : collection.favorites;
+                var responseJson = err ? err : collection.favorites;
     
                 res.status(err ? 500 : 200).json(responseJson).end();
 
@@ -113,4 +116,60 @@ exports.favorites = (req, res) => {
         );
 
 
+}
+
+exports.addToFavorites = (req, res) => {
+
+    req.checkBody('user', 'A user email is needed.').notEmpty();
+    req.checkBody('url', 'A valid favorite url is needed.').notEmpty();
+ 
+    let errors = req.validationErrors();
+
+    if (errors) {
+        return res.status(500).send(errors);
+    }
+
+    Favorites.create({ user_email: req.body.user, image_url: req.body.url }, function (err, small) {
+        if (err) {
+            res.status(500).json(err)
+        }
+
+        res.status(200).json('ok')
+
+    });
+      
+}
+
+exports.isItFavorite = (req, res) => {
+    Favorites.findOne({ user_email: req.params.user, image_url: req.params.url }, function (err, fav) {
+
+        if(err) {
+            return res.status(500).json('Error finding fav.')
+        }
+
+        if(!fav) {
+          return  res.status(404).json('not a favorite')
+        } 
+      
+        res.status(200).json(fav)
+
+    });
+      
+}
+
+exports.removeFavorite = (req, res) => {
+    Favorites.remove({ user_email: req.params.user, image_url: req.params.url }, function (err, fav) {
+
+        if(err) {
+            return res.status(500).json('Error finding fav.')
+        }
+
+        if(!fav) {
+          return  res.status(404).json('not a favorite')
+        } 
+      
+        res.status(200).json(fav)
+
+    });
+      
 }

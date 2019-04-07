@@ -3,7 +3,12 @@ import {
   CHANGE_AUTH,
   AUTH_USER,
   AUTH_ERROR,
-  FETCH_IMAGES
+  FETCH_IMAGES,
+  FETCH_FAVORITES,
+  POST_FAVORITES,
+  REMOVE_FAVORITES,
+  IS_IT_FAVORITE
+  
 } from './types';
 
 
@@ -105,9 +110,55 @@ export async function imageBundle(options) {
     type: FETCH_IMAGES,
     payload: response
   }
-
  
 }
+
+export async function fetchFavorites(options) {
+
+  const response = await axios.get(DEV_API + '/favorites/' + options.user);
+
+  return {
+    type: FETCH_FAVORITES,
+    payload: response
+  }
+}
+export async function addToFavorites(options) {
+
+  const params = {
+    "user": options.user,
+    "url": encodeURIComponent(options.url)
+  }
+
+  const response = await axios.post(DEV_API + '/favorites/', params);
+
+  return {
+    type: POST_FAVORITES,
+    payload: response
+  }
+}
+
+export async function checkFavorite(options) {
+
+  const response = await axios.get(DEV_API + '/favorites/' + options.user + '/' + encodeURIComponent(options.url));
+
+  return {
+    type: IS_IT_FAVORITE,
+    payload: response
+  }
+
+}
+
+export async function removeFavorite(options) {
+
+  const response = await axios.get(DEV_API + '/favorites/' + options.user + '/' + encodeURIComponent(options.url));
+
+  return {
+    type: REMOVE_FAVORITES,
+    payload: response
+  }
+  
+}
+
 
 function filterMimeTypes(options) {
   return Object.keys(options).map((item)=> {       

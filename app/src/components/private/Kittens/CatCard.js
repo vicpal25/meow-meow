@@ -16,6 +16,8 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import {addToFavorites, checkFavorite} from '../../../actions';
+import Cookies from 'js-cookie';
 
 const styles = theme => ({
   card: {
@@ -48,14 +50,47 @@ const styles = theme => ({
   avatar: {
     backgroundColor: red[500]
   },
+  iconHover: {
+    '&:hover': {
+      color: red[800],
+    },
+  },
 });
 
 class CatCard extends React.Component {
-  state = { expanded: false };
+  state = { expanded: false, user: Cookies.get('user') };
+
+  componentDidMount() {
+
+    const user = this.state.user;
+    // http://localhost:3090/favorites/vicpal25@yahoo.com/https:%2F%2Fcdn2.thecatapi.com%2Fimages%2F3qp.gif
+
+    checkFavorite({user : user, url: this.props.imageUrl})
+        .then((response)=> {
+
+          console.log(response)
+
+          this.setState({cats: response.payload.data})
+
+
+        })
+   }
 
   handleExpandClick = () => {
     this.setState(state => ({ expanded: !state.expanded }));
   };
+
+  handleFavoriteClick = (e) => {
+
+    const user = this.state.user;
+
+    addToFavorites({user: user, url: this.props.imageUrl})
+    .then((response)=> {
+      console.log(response);
+      ///this.setState({cats: response.payload.data})
+    })
+
+  }
 
   render() {
     const { classes } = this.props;
@@ -79,7 +114,7 @@ class CatCard extends React.Component {
         />
         <CardMedia
           className={classes.media}
-          image={this.props.imageUrl}
+          image={decodeURIComponent(this.props.imageUrl)}
         />
         <CardContent >
           <Typography component="p" className={classes.content}>
@@ -88,8 +123,8 @@ class CatCard extends React.Component {
           </Typography>
         </CardContent>
         <CardActions className={classes.actions} disableActionSpacing>
-          <IconButton aria-label="Add to favorites">
-            <FavoriteIcon />
+          <IconButton aria-label="Add to favorites" onClick={this.handleFavoriteClick} className={classes.iconHover}>
+            <FavoriteIcon  color="action" />
           </IconButton>
         
         </CardActions>

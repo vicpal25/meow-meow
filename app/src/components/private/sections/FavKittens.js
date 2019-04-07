@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import * as actions from '../../../actions';
 import requireAuth from '../../shared/RequireAuth';
 import PropTypes from 'prop-types';
 import CatComponent from '../Kittens/Cats';
 import CatCard from '../Kittens/CatCard';
-import {fetchImages} from '../../../actions'
+import {fetchFavorites} from '../../../actions'
+import Cookies from 'js-cookie';
 
 class GifKittens extends Component {
 
@@ -13,26 +15,28 @@ class GifKittens extends Component {
     super(props);
 
     this.state = {
-      cats: [],
-      PNG: false,
-      JPG: false,
-      GIF: true
+      cats: []
     }
 
   }
 
   componentDidMount() {
-      fetchImages({PNG : false, JPG: false, GIF: true })
+    const user = Cookies.get('user');
+    fetchFavorites({user : user})
         .then((response)=> {
-          this.setState({cats: response.payload.data })
+
+          this.setState({cats: response.payload.data})
+
+
         })
    }
 
   renderActivites() {
 
       return this.state.cats.map(cat => {
-        return  <CatCard imageUrl={cat.url}  />
+        return  <CatCard imageUrl={cat.image_url}  />
      })  
+
     
   }
 
@@ -44,6 +48,7 @@ class GifKittens extends Component {
     return (
       <div>
       <h1>Fav Kittens</h1>
+
       {this.renderActivites()}      
       </div>
     );

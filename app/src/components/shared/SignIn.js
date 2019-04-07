@@ -13,7 +13,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { reduxForm, Field } from 'redux-form';
-
+import Cookies from 'js-cookie';
 
 import {connect} from 'react-redux';
 import {compose} from 'redux';
@@ -76,6 +76,8 @@ class SignIn extends Component {
   
   onSubmit = formProps => {
     this.props.signin(formProps, (response)=> {
+      console.log(formProps);
+      Cookies.set('user', formProps.email);
       this.props.history.push('/');  
     });
   };

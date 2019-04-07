@@ -46,17 +46,17 @@ class App extends Component {
 
     if(this.props.authenticated) {
       return (
-        <MuiThemeProvider theme={theme}>     
-            <div className="App">
-                <NavDrawer>
-                  <Route path="/signout" component={SignOut} />
-                  <Route exact path="/" component={Meow} />
-                  <Route exact path="/jp" component={JPKittens} />
-                  <Route exact path="/g" component={GifKittens} />
-                  <Route exact path="/favs" component={FavKittens} />
-                </NavDrawer>        
-            </div>
-        </MuiThemeProvider>
+          <MuiThemeProvider theme={theme}>     
+              <div className="App">
+                  <NavDrawer>
+                    <Route path="/signout" component={SignOut} />
+                    <Route exact path="/" component={Meow} />
+                    <Route exact path="/jp" component={JPKittens} />
+                    <Route exact path="/g" component={GifKittens} />
+                    <Route exact path="/favs" component={FavKittens} />
+                  </NavDrawer>        
+              </div>
+          </MuiThemeProvider>
     );
     } else {
       return (<Route path="/" exact component={SignIn} />)

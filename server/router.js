@@ -2,7 +2,6 @@
 //Controller references
 const Authentication = require('./api/controllers/authentication');
 const ImageController = require('./api/controllers/image.controller');
-const FavoritesController = require('./api/controllers/favorites.controller');
 
 //Passport service provider
 const passportService = require('./services/passport');
@@ -12,6 +11,7 @@ const passport = require('passport');
 const requireAuth = passport.authenticate('jwt', {session: false })
 const requireSignin = passport.authenticate('local', {session: false })
 const session = require('express-session');
+const cookieSession = require('cookie-session')
 
 module.exports = function(app) {
 
@@ -27,15 +27,11 @@ module.exports = function(app) {
 
     app.get('/images/', ImageController.index);
     app.get('/images/bundle', ImageController.bundle);
-
-    app.get('/favorites', ImageController.favorites)
-    app.get('/favorites/:id', FavoritesController.show)
-    app.post('/favorites/:id', FavoritesController.place)
-    app.delete('/favorites/:id', FavoritesController.remove)
-
+    app.get('/favorites/:user', ImageController.favorites);
+    app.get('/favorites/:user/:url', ImageController.isItFavorite);
+    app.delete('/favorites/:user/:url', ImageController.removeFavorite);
+    app.post('/favorites/', ImageController.addToFavorites);
     app.post('/signin', requireSignin, Authentication.signin);
     app.post('/signup', Authentication.signup);
- 
-
 
 }

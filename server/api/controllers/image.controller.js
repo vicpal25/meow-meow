@@ -1,8 +1,10 @@
 
 
-const Cat = require('../../model/cat');
-const CATS_API =require('../../components/catsapi')
-const async = require('async');
+const Cat       = require('../../model/cat');
+const CATS_API  = require('../../components/catsapi')
+const async     = require('async');
+const User      = require('../../model/user');
+const Favorites = require('../../model/favorites');
 
 // For async callback
 const asyncCallback = function(){
@@ -28,7 +30,6 @@ exports.index = (req, res, next) =>{
 
 }
 
-
 exports.bundle = (req, res) => {
 
     let bundle = {}
@@ -36,7 +37,7 @@ exports.bundle = (req, res) => {
     const cb = new asyncCallback();
 
     async.series([
-        // Find MakretID by market code
+        // Find MakretID by market code and TODO..refactor limit & callback
         (callback) => {
             CATS_API.searchImage({mime_types: 'PNG', 'limit' : 1 })
             .then(function(result){                
@@ -61,6 +62,49 @@ exports.bundle = (req, res) => {
             (err,results) => {
 
                 var responseJson = err ? JSON.stringify(err) : results;
+    
+                res.status(err ? 500 : 200).json(responseJson).end();
+
+            }
+
+        );
+
+
+}
+
+exports.favorites = (req, res) => {
+
+    const cb = new asyncCallback();
+    let collection = {};
+
+    async.series([
+        // Find MakretID by market code
+        (callback) => {
+            User.findOne({email : 'vicpal25@yahoo.com' }, (err, user) => {          
+                
+                // if(err) { return done(err, false);  }
+                
+                // if(!user) {
+                //     done(null, false);
+                // } 
+
+                collection.user = user;
+                cb(callback, null,  collection.user);
+            })
+        },
+        (callback) => {
+
+            Favorites.find({}, (err, favorites) => {
+                collection.favorites = favorites;
+                cb(callback, null,  collection.favorites);
+            })
+ 
+        }],
+            (err,results) => {
+
+
+
+                var responseJson = err ? JSON.stringify(err) : collection.favorites;
     
                 res.status(err ? 500 : 200).json(responseJson).end();
 

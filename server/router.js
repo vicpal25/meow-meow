@@ -25,25 +25,17 @@ module.exports = function(app) {
     app.use(passport.initialize())
     app.use(passport.session())
 
-    app.post('/', requireAuth, function(req, res) {
-        res.send('hi');
-    });
-
     app.get('/images/', ImageController.index);
     app.get('/images/bundle', ImageController.bundle);
 
-    app.get('/favorites', FavoritesController.index)
+    app.get('/favorites', ImageController.favorites)
     app.get('/favorites/:id', FavoritesController.show)
     app.post('/favorites/:id', FavoritesController.place)
     app.delete('/favorites/:id', FavoritesController.remove)
 
     app.post('/signin', requireSignin, Authentication.signin);
     app.post('/signup', Authentication.signup);
-    // app.get('/blogentries', BlogController.index);
-    // app.get('/athlete/:id', AthleteController.index);
-    // app.get('/athlete/:id/stats', AthleteController.getStats);
  
-  
 
 
 }

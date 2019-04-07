@@ -9,7 +9,7 @@ const cors = require('cors');
 
 var app = express();
 
-mongoose.connect('mongodb://reactadapt25:vp040694@ds229373.mlab.com:29373/targetstride', { useNewUrlParser: true });
+mongoose.connect('mongodb://' + process.env.MONGO_DB, { useNewUrlParser: true });
 mongoose.set('debug', true);
 
 app.use(morgan('combined'));

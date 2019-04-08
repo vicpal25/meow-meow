@@ -126,7 +126,7 @@ export async function addToFavorites(options) {
 
   const params = {
     "user": options.user,
-    "url": encodeURIComponent(options.url)
+    "url": options.url
   }
 
   const response = await axios.post(DEV_API + '/favorites/', params);

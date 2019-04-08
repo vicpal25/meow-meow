@@ -60,22 +60,6 @@ const styles = theme => ({
 class CatCard extends React.Component {
   state = { expanded: false, user: Cookies.get('user') };
 
-  componentDidMount() {
-
-    const user = this.state.user;
-    // http://localhost:3090/favorites/vicpal25@yahoo.com/https:%2F%2Fcdn2.thecatapi.com%2Fimages%2F3qp.gif
-
-    checkFavorite({user : user, url: this.props.imageUrl})
-        .then((response)=> {
-
-          console.log(response)
-
-          this.setState({cats: response.payload.data})
-
-
-        })
-   }
-
   handleExpandClick = () => {
     this.setState(state => ({ expanded: !state.expanded }));
   };
